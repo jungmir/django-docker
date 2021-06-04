@@ -1,0 +1,38 @@
+body {
+    width: 500px;
+    height: 500px;
+    display: block;
+    margin: 10% 35%;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+    font-weight: bold;
+}
+
+.contents {
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.input_area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+}
+
+.input_area button {
+    margin-right: 0.5rem;
+    font-weight: bold;
+}
+
+.input_area #task {
+    margin-right: 1rem;
+}
+
+.contents table tbody tr th {
+    font-weight: lighter;
+}

@@ -1,0 +1,11 @@
+venv
+.venv
+
+.env
+
+**/__pycache__/*
+**/static/*
+
+*.sh
+!docker_kill.sh
+!docker_run.sh

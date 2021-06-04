@@ -1,0 +1,39 @@
+version: '3.9'
+
+x-server-volume:
+  &server-volume
+  type: 'bind'
+  source: ./server
+  target: /usr/src/app/
+
+services:
+  django:
+    container_name: django
+    restart: always
+    build: ./server
+    ports:
+      - "${DJANGO_PORT}:${DJANGO_PORT}"
+    env_file:
+      - .env
+    volumes:
+      - <<: *server-volume
+    command: sh -c "python3 manage.py makemigrations &&
+                    python3 manage.py migrate &&
+                    gunicorn server.wsgi:application --bind 0.0.0.0:${DJANGO_PORT}"
+    environment:
+      - DB_HOST=${DB_HOST}
+
+  nginx:
+    container_name: nginx
+    restart: always
+    build: ./nginx
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates
+      - ./server/static:/usr/src/app/static
+    ports:
+      - "${PORT}:80"
+    environment:
+      - PORT=${PORT}
+      - DJANGO_PORT=${DJANGO_PORT}
+    depends_on:
+      - django
