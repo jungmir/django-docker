@@ -20,7 +20,7 @@ ROOT_DIR = BASE_DIR.parent
 ENV_PATH = ROOT_DIR / '.env'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'app/')
+TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app/')
 
 load_dotenv(dotenv_path=ENV_PATH)
 
