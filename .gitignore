@@ -5,6 +5,7 @@ venv
 
 **/__pycache__/*
 **/static/*
+**/static_root/*
 
 *.sh
 !docker_kill.sh
