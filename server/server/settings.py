@@ -19,7 +19,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = BASE_DIR.parent
 ENV_PATH = ROOT_DIR / '.env'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app/')
 
 load_dotenv(dotenv_path=ENV_PATH)
@@ -131,6 +130,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static_root')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
