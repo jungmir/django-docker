@@ -1,27 +1,19 @@
 version: '3.9'
 
-x-server-volume:
-  &server-volume
-  type: 'bind'
-  source: ./server
-  target: /usr/src/app/
-
 services:
   django:
     container_name: django
     restart: always
-    build: ./server
+    build: .
     ports:
       - "${DJANGO_PORT}:${DJANGO_PORT}"
-    env_file:
-      - .env
-    volumes:
-      - <<: *server-volume
     command: sh -c "python3 manage.py makemigrations &&
                     python3 manage.py migrate &&
                     gunicorn server.wsgi:application --bind 0.0.0.0:${DJANGO_PORT}"
     environment:
       - DB_HOST=${DB_HOST}
+    depends_on:
+      - test_mysql
 
   nginx:
     container_name: nginx
@@ -37,3 +29,22 @@ services:
       - DJANGO_PORT=${DJANGO_PORT}
     depends_on:
       - django
+
+  test_mysql:
+    container_name: test_mysql
+    restart: always
+    image: mysql:latest
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - ./initial.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_volume:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - TZ=Asia/Seoul
+
+volumes:
+  db_volume:
