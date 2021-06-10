@@ -4,7 +4,12 @@ services:
   django:
     container_name: django
     restart: always
-    build: .
+    build: ./server
+    env_file:
+      - .env
+    networks:
+      - db_internal
+      - web_external
     ports:
       - "${DJANGO_PORT}:${DJANGO_PORT}"
     command: sh -c "python3 manage.py makemigrations &&
@@ -21,7 +26,9 @@ services:
     build: ./nginx
     volumes:
       - ./nginx/templates:/etc/nginx/templates
-      - ./server/static:/usr/src/app/static
+      - ./static:/usr/src/app/static
+    networks:
+      - web_external
     ports:
       - "${PORT}:80"
     environment:
@@ -33,12 +40,15 @@ services:
   test_mysql:
     container_name: test_mysql
     restart: always
-    image: mysql:latest
+    image: mysql
+    networks:
+      - db_internal
     ports:
       - "${DB_PORT}:3306"
     volumes:
       - ./initial.sql:/docker-entrypoint-initdb.d/init.sql
       - db_volume:/var/lib/mysql
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       - MYSQL_USER=${DB_USER}
@@ -48,3 +58,11 @@ services:
 
 volumes:
   db_volume:
+
+networks:
+  db_internal:
+    external:
+      name: db_internal
+  web_external:
+    external:
+      name: web_external

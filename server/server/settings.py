@@ -19,8 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = BASE_DIR.parent
 ENV_PATH = ROOT_DIR / '.env'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app/')
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static/')
 
 load_dotenv(dotenv_path=ENV_PATH)
 
@@ -31,7 +30,7 @@ load_dotenv(dotenv_path=ENV_PATH)
 SECRET_KEY = 'django-insecure-@9xp9b8eo83bqah!@25j_sl27!yil8esew-+kdwp9$l8hsu=&s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -46,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'server',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +59,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'server.urls'
+
+TEMPLATE_DIR = BASE_DIR / 'app'
 
 TEMPLATES = [
     {
@@ -127,10 +129,17 @@ USE_L10N = True
 USE_TZ = True
 
 
+STATICFILES_FINDER = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIR = [
+        Path(TEMPLATE_DIR),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
