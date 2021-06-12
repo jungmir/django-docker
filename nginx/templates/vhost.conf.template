@@ -1,7 +1,7 @@
 server {
 
     listen 80;
-    server_name dev.refeely.com;
+    server_name dev.tryourself.com;
 
     location / {
         proxy_pass http://django:8001;
