@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = BASE_DIR.parent
 ENV_PATH = ROOT_DIR / '.env'
 
-STATIC_ROOT = os.path.join(ROOT_DIR, 'static/')
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static_root/')
 
 load_dotenv(dotenv_path=ENV_PATH)
 
